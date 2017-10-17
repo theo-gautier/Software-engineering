@@ -50,7 +50,7 @@ public class BarChart extends ApplicationFrame {
     
 	public BarChart( String applicationTitle , String chartTitle ) {
 		
-		super( applicationTitle );        
+		super(applicationTitle);        
       //Création de l'histogramme.
 		JFreeChart barChart = ChartFactory.createBarChart(
 		chartTitle,           
