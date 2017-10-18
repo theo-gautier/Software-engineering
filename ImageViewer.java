@@ -17,6 +17,7 @@ import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.print.attribute.standard.OutputDeviceAssigned;
 import javax.swing.JFileChooser;
 
 public class ImageViewer extends JFrame /*implements ActionListener*/
@@ -84,7 +85,7 @@ public class ImageViewer extends JFrame /*implements ActionListener*/
 			public void actionPerformed(ActionEvent arg0) {
 				BufferedImage inv;
 				try {
-					inv = ImageIO.read(new File("img.png"));
+					inv = inputImage.getImage();
 				
 					for(int x =0; x < inv.getWidth();x++) {
 						for (int y =0; y < inv.getHeight(); y++) {
@@ -172,6 +173,10 @@ public class ImageViewer extends JFrame /*implements ActionListener*/
 		this.setJMenuBar(menuBar);
 		this.setVisible(true);
 	}
+	
+	DisplayedImage getOutputImage() {
+		return ouputImage;
+		}
 
 	/*
 	 * Class listening to a given button
@@ -183,11 +188,12 @@ public class ImageViewer extends JFrame /*implements ActionListener*/
 			System.out.println("Action Performed");
 		}
 	}
-	
+		
 	class ButtonBarChartListener implements ActionListener{
 		public void actionPerformed(ActionEvent arg0) 
 		{
-			final BarChart bar = new BarChart("Poids des couleurs","Résultats");
+			ouputImage.repaint();
+			final BarChart bar = new BarChart(inputImage.getImage(),"Poids des couleurs","Résultats");
 			bar.pack();
 			RefineryUtilities.centerFrameOnScreen(bar);
 	        bar.setVisible(true);

@@ -29,6 +29,7 @@ public class DisplayedImage extends JPanel {
     
     public void ChangeImage(BufferedImage img){ /* Ancienne image est remplacée*/
 		image =img;
+		repaint();
     }
     
     public BufferedImage getImage() {
