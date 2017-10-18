@@ -8,20 +8,38 @@ import org.jfree.ui.ApplicationFrame;
 import java.awt.image.BufferedImage;
 
 public class BarChart extends ApplicationFrame {
+	   
+	BufferedImage image;
+	
+	public BarChart(BufferedImage img, String applicationTitle , String chartTitle ) {
+		
+		
+		super(applicationTitle);   
+		image=img;
+      //Création de l'histogramme.
+		JFreeChart barChart = ChartFactory.createBarChart(
+		chartTitle,           
+        "Couleurs",            
+        "Pourcentage",            
+        createDataset(),          
+        PlotOrientation.VERTICAL,           
+        true, true, false);
+         
+		ChartPanel chartPanel = new ChartPanel(barChart);        
+		chartPanel.setPreferredSize(new java.awt.Dimension(560,367));        
+		setContentPane(chartPanel); 
+	}
    
-	private DisplayedImage image = new DisplayedImage();
-	
-	
-    public int[] getBarCount() {
-    	image.revalidate();
-    	BufferedImage image2 = image.getImage();
+	public int[] getBarCount() {
     	int x; int y; int color;
     	int c_r = 0; int c_g = 0; int c_b = 0;
     	int tab[] = new int[3]; //Tableau contenant les compteurs de rouge vert et bleu dans l'image.
 
-    	for (y = 0; y < image2.getHeight(); y ++) {
-    		for (x = 0; x < image2.getWidth(); x++) {
-    			color = image2.getRGB(x,y);
+    	for (y = 0; y < image.getHeight(); y ++) {
+    		System.out.println("lol");
+
+    		for (x = 0; x < image.getWidth(); x++) {
+    			color = image.getRGB(x,y);
     			int r = (color>>16)&0xFF; //red
     			int g = (color>>8)&0xFF; //green
     			int b = (color>>0)&0xFF; //blue
@@ -49,23 +67,6 @@ public class BarChart extends ApplicationFrame {
     	return tab;
     }
     
-	public BarChart( String applicationTitle , String chartTitle ) {
-		
-		super(applicationTitle);        
-      //Création de l'histogramme.
-		JFreeChart barChart = ChartFactory.createBarChart(
-		chartTitle,           
-        "Couleurs",            
-        "Pourcentage",            
-        createDataset(),          
-        PlotOrientation.VERTICAL,           
-        true, true, false);
-         
-		ChartPanel chartPanel = new ChartPanel(barChart);        
-		chartPanel.setPreferredSize(new java.awt.Dimension(560,367));        
-		setContentPane(chartPanel); 
-	}
-   
 	private CategoryDataset createDataset( ) {
 		final String red = "RED";        
 		final String green = "GREEN";        
