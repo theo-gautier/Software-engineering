@@ -1,3 +1,5 @@
+package principal;
+
 /**
  * Basic image processing application
  *
