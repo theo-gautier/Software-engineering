@@ -1,9 +1,5 @@
 package kd_tree;
 import java.util.Arrays;
-import java.awt.Color;
-import java.lang.*;
-import principal.DisplayedImage;
-import java.awt.image.BufferedImage;
 
 public class KdTree {
 	
@@ -36,6 +32,11 @@ public class KdTree {
 		KdNode.getDimension(k);
 		colorPalette=new int[0][k];
 		minDistance=Math.sqrt(3)*255;
+	}
+	
+	public static int[][] getPalette()
+	{
+		return colorPalette;
 	}
 	
 	public boolean isLeaf() // Renvoie un boolean pour savoir si l'arbre est une feuille ou non.

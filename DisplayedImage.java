@@ -1,4 +1,3 @@
-package principal;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -10,7 +9,11 @@ import javax.swing.JPanel;
 public class DisplayedImage extends JPanel
 {
 	
-    private BufferedImage image;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private BufferedImage image;
     
     public DisplayedImage() {
     		try {

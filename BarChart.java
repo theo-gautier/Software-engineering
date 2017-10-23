@@ -1,4 +1,4 @@
-package principal;
+
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel; 
@@ -11,6 +11,10 @@ import java.awt.image.BufferedImage;
 
 public class BarChart extends ApplicationFrame {
 	   
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	BufferedImage image;
 	
 	public BarChart(BufferedImage img, String applicationTitle , String chartTitle ) {

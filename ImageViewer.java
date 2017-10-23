@@ -1,4 +1,3 @@
-package principal;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -26,6 +25,11 @@ import kd_tree.*;
 
 public class ImageViewer extends JFrame /*implements ActionListener*/
 {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private JMenuItem itemSave = new JMenuItem("Save");	
 	
