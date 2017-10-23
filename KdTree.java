@@ -7,7 +7,7 @@ public class KdTree {
 	private KdTree fg;   // Sous arbre gauche.
 	private KdTree fd;   // Sous arbre droit.
 	private int vector;  // Définit la normale à l'hyperplan modulo k.
-						 // Par exemple, dans un repère cartésien, 0 vaut (1,0,0) ou la couteur Rouge, 1 représente (0,1,0).
+						 // Par exemple, dans un repère cartésien, 0 vaut (1,0,0) ou la couleur Rouge, 1 représente (0,1,0).
 	                     // Dans notre exemple, k vaut 3, 0 représente le Rouge, 1 représente le vert et 2 représente le bleu.
 	
 	
@@ -139,7 +139,7 @@ public class KdTree {
 		this.fd=null;
 	}
 	
-	public void initFromArray(int[][] listPoint, int vector) // Initialie l'arbre à partir d'une liste de points.
+	public void initFromArray(int[][] listPoint, int vector) // Initialise l'arbre à partir d'une liste de points.
 	{
 		if(listPoint.length==1) // Définit une feuille.
 		{
