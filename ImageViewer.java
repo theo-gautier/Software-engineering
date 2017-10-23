@@ -22,6 +22,8 @@ import javax.imageio.ImageIO;
 import javax.print.attribute.standard.OutputDeviceAssigned;
 import javax.swing.JFileChooser;
 
+import kd_tree.*;
+
 public class ImageViewer extends JFrame /*implements ActionListener*/
 {
 
@@ -35,6 +37,7 @@ public class ImageViewer extends JFrame /*implements ActionListener*/
 	private JButton buttonAction = new JButton("Action");
 	private JButton buttonInversion = new JButton("Inversion");
 	private JButton buttonBarChart = new JButton("Bar Chart");
+	private JButton buttonQuantification = new JButton("Quantificaion");
 
 	//Création du header où se trouve un bouton File, et un sous-bouton Close.
 	private JMenuBar menuBar = new JMenuBar();
@@ -74,12 +77,18 @@ public class ImageViewer extends JFrame /*implements ActionListener*/
 		action.add(buttonBarChart);
 		buttonBarChart.addActionListener(new ButtonBarChartListener());
 		
+		JPanel quantification = new JPanel(); 
+		quantification.setLayout(new BoxLayout(quantification, BoxLayout.PAGE_AXIS)); // Je ne suis pas sûr que la quantification
+		quantification.add(buttonQuantification);                                     // sera compatible avec l'inversion.
+		
+		
 		JPanel global = new JPanel();
 		global.setLayout(new BoxLayout(global, BoxLayout.LINE_AXIS));
 		global.add(input);
 		global.add(action);
 		global.add(inversion);
 		global.add(output);
+		global.add(quantification);
 		
 		
 		// Defines action associated to buttons
@@ -171,6 +180,44 @@ public class ImageViewer extends JFrame /*implements ActionListener*/
 		}
 		});
 		
+		buttonQuantification.addActionListener(new ButtonListener(){
+			public void actionPerformed(ActionEvent arg0) 
+			{
+				BufferedImage image;
+				KdTree.getDimension(3);
+				KdTree tree= new KdTree();
+				try
+				{
+					image=ouputImage.getImage();
+					int[][] PixelInArray=Utilitary.fromImageToArray(image, 3);
+					tree.initFromArray(PixelInArray, 0);
+					tree.meanColorPalette(8);
+			    	for (int i=0; i<PixelInArray.length; i++)
+			    	{
+			    		PixelInArray[i]=tree.meanColorKdNode(PixelInArray[i], 8);
+			    	}
+			    	for (int x=0; x<image.getWidth(); x++)
+		    		{
+			    		for(int y=0; y<image.getHeight(); y++)
+		    			{
+			    			int i= x*image.getWidth()+y;
+							int rgb = new Color(PixelInArray[i][0],PixelInArray[i][1],PixelInArray[i][2]).getRGB();
+							image.setRGB(x, y, rgb);
+		    			}
+		    		}
+					ouputImage.ChangeImage(image);
+					/*output.updateUI();*/
+					output.repaint();
+					ImageIO.write(image, "png", new File ("inverse.png"));
+				  }
+				  catch (IOException exp)
+				  {
+					exp.printStackTrace();
+				  }
+				}
+			});
+		
+		
 		this.menuBar.add(fileMenu);
 		this.setJMenuBar(menuBar);
 		this.setVisible(true);
@@ -191,7 +238,8 @@ public class ImageViewer extends JFrame /*implements ActionListener*/
 		}
 	}
 		
-	class ButtonBarChartListener implements ActionListener{
+	class ButtonBarChartListener implements ActionListener
+	{
 		public void actionPerformed(ActionEvent arg0) 
 		{
 			ouputImage.repaint();
