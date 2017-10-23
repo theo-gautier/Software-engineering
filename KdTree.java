@@ -98,7 +98,7 @@ public class KdTree {
 		
 	}
 	
-	public String treeToString() // Renvoie une représentation en chaîne de caractère de l'arbre (aide au débuggage).
+	private String treeToString() // Renvoie une représentation en chaîne de caractère de l'arbre (aide au débuggage).
 	{
 		if (this.isLeaf())
 		{
@@ -122,6 +122,11 @@ public class KdTree {
 			line.append(")");
 			return line.toString();
 		}
+	}
+	
+	public void printTree()
+	{
+		System.out.println(this.treeToString());
 	}
 	
 	public void intFromPoint(int[] point, int vector)  // Initialise l'arbre à partir d'un point.
