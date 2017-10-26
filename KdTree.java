@@ -21,6 +21,16 @@ public class KdTree
 	{
 		System.out.println(node.printNode());
 	}
+	
+	public void removePoint(int[] color)
+	{
+		// à complémenter : il faut utiliser la méthode removePoint de la classe Kdnode.
+	}
+	
+	public void addPoint(int[] color)
+	{
+		this.node.addPoint(color);
+	}
 }
 
 class KdNode
@@ -147,5 +157,14 @@ class KdNode
 		}
 	}
 	
+	public void removePoint(int color[])
+	{
+		// à compléter
+	}
+	
+	public void addPoint(int[] color)
+	{
+		// à compléter
+	}
 	
 }
