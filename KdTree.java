@@ -24,7 +24,7 @@ public class KdTree
 	
 	public void removePoint(int[] color)
 	{
-		// à complémenter : il faut utiliser la méthode removePoint de la classe Kdnode.
+		// ï¿½ complï¿½menter : il faut utiliser la mï¿½thode removePoint de la classe Kdnode.
 	}
 	
 	public void addPoint(int[] color)
@@ -37,9 +37,9 @@ class KdNode
 {
 	int color[];
 	int dimension;
-	int vector; // Définit la normale à l'hyperplan modulo k.
-	            // Par exemple, dans un repère cartésien, 0 vaut (1,0,0), 1 représente (0,1,0).
-                // Dans notre exemple, k vaut 3, 0 représente le Rouge, 1 représente le vert et 2 représente le bleu.
+	int vector; // Dï¿½finit la normale ï¿½ l'hyperplan modulo k.
+	            // Par exemple, dans un repï¿½re cartï¿½sien, 0 vaut (1,0,0), 1 reprï¿½sente (0,1,0).
+                // Dans notre exemple, k vaut 3, 0 reprï¿½sente le Rouge, 1 reprï¿½sente le vert et 2 reprï¿½sente le bleu.
 	KdNode fg;
 	KdNode fd;
 	
@@ -48,7 +48,7 @@ class KdNode
 		
 	}
 	
-	public boolean isLeaf() // Vérifie si un noeud repésente une feuille.
+	public boolean isLeaf() // Vï¿½rifie si un noeud repï¿½sente une feuille.
 	{
 		if (this.fg==null && this.fd==null)
 		{
@@ -83,7 +83,7 @@ class KdNode
 		{
 			MyQuickSort sorter = new MyQuickSort(listPoint, vector);
 			listPoint=sorter.getSortedList();
-			// Nous faisons le choix de former, pour ce cas, la configuration de noeud qui posséde un fils droit seulement.
+			// Nous faisons le choix de former, pour ce cas, la configuration de noeud qui possï¿½de un fils droit seulement.
 			this.color=listPoint[0];
 			this.vector=vector;
 			this.dimension=dimension;
@@ -125,7 +125,7 @@ class KdNode
 		}
 		else
 		{
-			StringBuilder line=new StringBuilder(); // Compléter son arbre
+			StringBuilder line=new StringBuilder(); // Complï¿½ter son arbre
 			line.append("(");
 			for (int i=0; i<this.dimension-1; i++)
 			{
@@ -159,12 +159,41 @@ class KdNode
 	
 	public void removePoint(int color[])
 	{
-		// à compléter
-	}
+		// ï¿½ complï¿½ter
+	{
 	
 	public void addPoint(int[] color)
 	{
-		// à compléter
+		int dimension = color.length;
+		for (int p=0; p<dimension-1; p++)
+		{
+			int vector = 0;
+			if (color[p+1] > color[p])
+					vector = p;
+		}
+		KdNode a = new KdNode();
+		a.initFromPoint(color,vector,dimension);
+		if (this.isLeaf())    // si c'est une feuille on ajoute directement le noeud
+			this.fd = a;
+		if (this.fd == null)   // si l'un des deux fils est nul on y ajoute le noeud
+			this.fd = a;
+		if (this.fg == null)
+			this.fg = a;
+		else
+			if (Math.random()<0.5)
+				fd.addPoint(color);  // si le noeud a deux fils, on essaye d'appliquer la methode
+			else                     // sur l'un des deux fils
+				fg.addPoint(color);  // on utilise l'aleatoire pour Ã©quilibrer l'arbre sur un grand nombre d'ajout
+			
+			
+			
+			
+		
+		
+				
+		
 	}
+		
 	
-}
+	
+
