@@ -11,6 +11,7 @@ public class KdTree
 	public KdTree (int dimension) 
 	{
 		this.dimension=dimension;
+		this.colorRange=new int[0][this.dimension];
 	}
 		
 	public void initFromArray (int [][] listPoint, int vector)
@@ -52,6 +53,7 @@ public class KdTree
 	public void buildColorRange(int depth)
 	{
 		this.node.buildColorRange(this.colorRange, depth);
+		this.colorRange=Arrays.copyOfRange(this.colorRange, 1, this.colorRange.length);
 	}
 	
 }
