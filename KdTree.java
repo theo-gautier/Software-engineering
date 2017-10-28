@@ -165,16 +165,6 @@ class KdNode
 		}
 	}
 	
-	public void printList(int color[]) {
-		int i;
-		System.out.print("(");
-		for (i = 0; i < dimension -1; i++) {
-			System.out.print(color[i] + ",");
-		}
-		System.out.print(color[i]);
-		System.out.println(")");
-
-	}
 	public boolean eqColor(int ext_color[]) {
 		int i;
 		for (i = 0; i < dimension; i++) {
