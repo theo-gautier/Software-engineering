@@ -26,7 +26,7 @@ public class KdTree
 	
 	public void removePoint(int[] color)
 	{
-		//TODO : Cas où le KdTree est vide.
+		//TODO : Cas oÃ¹ le KdTree est vide.
 		if (this.node.color==color)
 		{
 			this.node=null;
@@ -62,12 +62,12 @@ class KdNode
 {
 	public int color[];
 	public int dimension;
-	public int vector; // Définit la normale à l'hyperplan modulo k.
-	                   // Par exemple, dans un repère cartésien, 0 vaut (1,0,0), 1 représente (0,1,0).
-                       // Dans notre exemple, k vaut 3, 0 représente le Rouge, 1 représente le vert et 2 représente le bleu.
+	public int vector; // DÃ©finit la normale Ã  l'hyperplan modulo k.
+	                   // Par exemple, dans un repÃ¨re cartÃ©sien, 0 vaut (1,0,0), 1 reprÃ©sente (0,1,0).
+                       // Dans notre exemple, k vaut 3, 0 reprÃ©sente le Rouge, 1 reprÃ©sente le vert et 2 reprÃ©sente le bleu.
 	public KdNode fg;
 	public KdNode fd;
-	// Les attributs suivants serviront pour la méthode getNearestPoint;
+	// Les attributs suivants serviront pour la mÃ©thode getNearestPoint;
 	int[] nearestColor;
 	double minDistance=Math.sqrt(3)*255;
 	
@@ -76,7 +76,7 @@ class KdNode
 		
 	}
 	
-	public boolean isLeaf() // Vérifie si un noeud repésente une feuille.
+	public boolean isLeaf() // VÃ©rifie si un noeud repÃ©sente une feuille.
 	{
 		if (this.fg==null && this.fd==null)
 		{
@@ -111,7 +111,7 @@ class KdNode
 		{
 			MyQuickSort sorter = new MyQuickSort(listPoint, vector);
 			listPoint=sorter.getSortedList();
-			// Nous faisons le choix de former, pour ce cas, la configuration de noeud qui posséde un fils droit seulement.
+			// Nous faisons le choix de former, pour ce cas, la configuration de noeud qui possÃ©de un fils droit seulement.
 			this.color=listPoint[0];
 			this.vector=vector;
 			this.dimension=dimension;
@@ -153,7 +153,7 @@ class KdNode
 		}
 		else
 		{
-			StringBuilder line=new StringBuilder(); // Compléter son arbre
+			StringBuilder line=new StringBuilder(); // ComplÃ©ter son arbre
 			line.append("(");
 			for (int i=0; i<this.dimension-1; i++)
 			{
@@ -222,7 +222,7 @@ class KdNode
 	
 	public void addPoint(int[] color)
 	{
-		// à compléter
+		// Ã  complÃ©ter
 	}
 	
 	public double getDistance(KdNode chosenPoint)
@@ -250,7 +250,7 @@ class KdNode
 		}
 		else
 		{
-			int counter; // Ce compteur sera utile pour étudier le cas où l'hypersphère et l'hyperplan s'intersècent.
+			int counter; // Ce compteur sera utile pour Ã©tudier le cas oÃ¹ l'hypersphÃ¨re et l'hyperplan s'intersÃ¨cent.
 			double distance = this.getDistance(chosenPoint);
 			if (distance < chosenPoint.minDistance)
 			{
@@ -299,6 +299,13 @@ class KdNode
 	
 	public void buildColorRange(int[][] colorRange, int depth)
 	{
+	     if (depth==1){
+		     return colorRange;
+	     }
 		
+	     else {
+		     return  concatenateArrays(buildColorRange(colorRange,depth-1),colorRange[0]);
+	     }
+			
 	}
 }
