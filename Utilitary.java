@@ -14,14 +14,4 @@ public class Utilitary  // La classe ci-dessous fournit des méthodes statiques u
 		c[a.length]=b;
 		return c;
 	}
-	
-	public static void printList(int color[]) {
-		int i;
-		System.out.print("(");
-		for (i = 0; i <color.length-1; i++) {
-			System.out.print(color[i] + ",");
-		}
-		System.out.print(color[i]);
-		System.out.println(")");
-	}
 }

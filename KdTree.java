@@ -24,32 +24,34 @@ public class KdTree
 	
 	public void removePoint(int[] color)
 	{
-		//TODO : Cas où le KdTree est vide.
-		if (this.node.color==color)
-		{
-			this.node=null;
-		}
-		else
-		{
-			this.node.removePoint(color);
-		}
+		// à complémenter : il faut utiliser la méthode removePoint de la classe Kdnode.
 	}
 	
 	public void addPoint(int[] color)
 	{
 		this.node.addPoint(color);
 	}
+	public int[] getNearestPoint(int[] color)
+	{
+		KdNode chosenPoint=new KdNode();
+		chosenPoint.initFromPoint(color, -1, this.dimension);
+		this.node.getNearestPoint(chosenPoint);
+		return chosenPoint.nearestColor; 
+	}
 }
 
 class KdNode
 {
-	int color[];
-	int dimension;
-	int vector; // Définit la normale à l'hyperplan modulo k.
-	            // Par exemple, dans un repère cartésien, 0 vaut (1,0,0), 1 représente (0,1,0).
-                // Dans notre exemple, k vaut 3, 0 représente le Rouge, 1 représente le vert et 2 représente le bleu.
-	KdNode fg;
-	KdNode fd;
+	public int color[];
+	public int dimension;
+	public int vector; // Définit la normale à l'hyperplan modulo k.
+	                   // Par exemple, dans un repère cartésien, 0 vaut (1,0,0), 1 représente (0,1,0).
+                       // Dans notre exemple, k vaut 3, 0 représente le Rouge, 1 représente le vert et 2 représente le bleu.
+	public KdNode fg;
+	public KdNode fd;
+	// Les attributs suivants serviront pour la méthode getNearestPoint;
+	int[] nearestColor;
+	double minDistance=Math.sqrt(3)*255;
 	
 	public KdNode ()
 	{
@@ -165,43 +167,87 @@ class KdNode
 		}
 	}
 	
-	public boolean eqColor(int ext_color[]) {
-		int i;
-		for (i = 0; i < dimension; i++) {
-			if(this.color[i] != ext_color[i]) {
-				return false;
-			}
-		}
-		return true;
-	}
 	public void removePoint(int color[])
 	{
-		if ( !this.isLeaf()){
-			if(fg != null) {
-				if(fg.eqColor(color)) {
-					fg = null;
-				}
-				else if(!fg.eqColor(color)) {
-					fg.removePoint(color);
-					}
-					
-				}
-			}
-			
-			if(fd != null) {
-				if(fd.eqColor(color)) {
-					fd = null;
-				}
-				else if(!fd.eqColor(color)) {
-						fd.removePoint(color);
-					
-				}
-			}
-		}
+		// à compléter
+	}
 	
 	public void addPoint(int[] color)
 	{
 		// à compléter
 	}
+	
+	public double getDistance(KdNode chosenPoint)
+	{
+		int p0[]=this.color, p1[]=chosenPoint.color;
+		double distance=0;
+		for(int i=0; i<this.dimension; i++)
+		{
+			distance+=(p0[i]-p1[i])*(p0[i]-p1[i]);
+		}
+		distance=Math.sqrt(distance);
+		return distance;
+	}
+	
+	public void getNearestPoint(KdNode chosenPoint)	
+	{
+		if (this.isLeaf())
+		{
+			double distance = this.getDistance(chosenPoint);
+			if (distance<chosenPoint.minDistance)
+			{	
+				chosenPoint.minDistance=distance;
+				chosenPoint.nearestColor=this.color;
+			}
+		}
+		else
+		{
+			int counter; // Ce compteur sera utile pour étudier le cas où l'hypersphère et l'hyperplan s'intersècent.
+			double distance = this.getDistance(chosenPoint);
+			if (distance < chosenPoint.minDistance)
+			{
+				chosenPoint.minDistance=distance;
+				chosenPoint.nearestColor=this.color;
+			}
+			if (this.color[this.vector]<chosenPoint.color[this.vector])
+			{
+				counter=1;
+				if (this.fd!=null)
+				{
+					this.fd.getNearestPoint(chosenPoint);
+				}
+			}
+			else
+			{
+				counter=0;
+				if (this.fg!=null)
+				{
+					this.fg.getNearestPoint(chosenPoint);
+				}
+			}
+			if(counter==1)
+			{
+				if(Math.abs(this.color[this.vector]-chosenPoint.color[this.vector])<chosenPoint.minDistance)
+				{
+					if (this.fg!=null)
+					{
+						this.fg.getNearestPoint(chosenPoint);
+					}
+				}
+			}
+			else
+			{
+				if(Math.abs(this.color[this.vector]-chosenPoint.color[this.vector])<chosenPoint.minDistance)
+				{
+					if (this.fd!=null)
+					{
+						this.fd.getNearestPoint(chosenPoint);
+					}
+				}				
+			}
+			
+		}
+	}
+	
 	
 }
