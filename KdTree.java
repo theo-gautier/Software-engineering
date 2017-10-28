@@ -24,7 +24,15 @@ public class KdTree
 	
 	public void removePoint(int[] color)
 	{
-		// à complémenter : il faut utiliser la méthode removePoint de la classe Kdnode.
+		//TODO : Cas où le KdTree est vide.
+		if (this.node.color==color)
+		{
+			this.node=null;
+		}
+		else
+		{
+			this.node.removePoint(color);
+		}
 	}
 	
 	public void addPoint(int[] color)
@@ -157,10 +165,49 @@ class KdNode
 		}
 	}
 	
+	public void printList(int color[]) {
+		int i;
+		System.out.print("(");
+		for (i = 0; i < dimension -1; i++) {
+			System.out.print(color[i] + ",");
+		}
+		System.out.print(color[i]);
+		System.out.println(")");
+
+	}
+	public boolean eqColor(int ext_color[]) {
+		int i;
+		for (i = 0; i < dimension; i++) {
+			if(this.color[i] != ext_color[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
 	public void removePoint(int color[])
 	{
-		// à compléter
-	}
+		if ( !this.isLeaf()){
+			if(fg != null) {
+				if(fg.eqColor(color)) {
+					fg = null;
+				}
+				else if(!fg.eqColor(color)) {
+					fg.removePoint(color);
+					}
+					
+				}
+			}
+			
+			if(fd != null) {
+				if(fd.eqColor(color)) {
+					fd = null;
+				}
+				else if(!fd.eqColor(color)) {
+						fd.removePoint(color);
+					
+				}
+			}
+		}
 	
 	public void addPoint(int[] color)
 	{
