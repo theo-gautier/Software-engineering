@@ -6,6 +6,7 @@ public class KdTree
 {
 	int dimension;
 	KdNode node=new KdNode();
+	int colorRange[][];
 	
 	public KdTree (int dimension) 
 	{
@@ -39,6 +40,7 @@ public class KdTree
 	{
 		this.node.addPoint(color);
 	}
+	
 	public int[] getNearestPoint(int[] color)
 	{
 		KdNode chosenPoint=new KdNode();
@@ -46,6 +48,12 @@ public class KdTree
 		this.node.getNearestPoint(chosenPoint);
 		return chosenPoint.nearestColor; 
 	}
+	
+	public void buildColorRange(int depth)
+	{
+		this.node.buildColorRange(this.colorRange, depth);
+	}
+	
 }
 
 class KdNode
@@ -287,5 +295,8 @@ class KdNode
 		}
 	}
 	
-	
+	public void buildColorRange(int[][] colorRange, int depth)
+	{
+		
+	}
 }
