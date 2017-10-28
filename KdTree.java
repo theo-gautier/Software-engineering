@@ -39,17 +39,27 @@ public class KdTree
 	{
 		this.node.addPoint(color);
 	}
+	public int[] getNearestPoint(int[] color)
+	{
+		KdNode chosenPoint=new KdNode();
+		chosenPoint.initFromPoint(color, -1, this.dimension);
+		this.node.getNearestPoint(chosenPoint);
+		return chosenPoint.nearestColor; 
+	}
 }
 
 class KdNode
 {
-	int color[];
-	int dimension;
-	int vector; // Définit la normale à l'hyperplan modulo k.
-	            // Par exemple, dans un repère cartésien, 0 vaut (1,0,0), 1 représente (0,1,0).
-                // Dans notre exemple, k vaut 3, 0 représente le Rouge, 1 représente le vert et 2 représente le bleu.
-	KdNode fg;
-	KdNode fd;
+	public int color[];
+	public int dimension;
+	public int vector; // Définit la normale à l'hyperplan modulo k.
+	                   // Par exemple, dans un repère cartésien, 0 vaut (1,0,0), 1 représente (0,1,0).
+                       // Dans notre exemple, k vaut 3, 0 représente le Rouge, 1 représente le vert et 2 représente le bleu.
+	public KdNode fg;
+	public KdNode fd;
+	// Les attributs suivants serviront pour la méthode getNearestPoint;
+	int[] nearestColor;
+	double minDistance=Math.sqrt(3)*255;
 	
 	public KdNode ()
 	{
@@ -199,9 +209,83 @@ class KdNode
 			}
 		}
 	
+	
 	public void addPoint(int[] color)
 	{
 		// à compléter
 	}
+	
+	public double getDistance(KdNode chosenPoint)
+	{
+		int p0[]=this.color, p1[]=chosenPoint.color;
+		double distance=0;
+		for(int i=0; i<this.dimension; i++)
+		{
+			distance+=(p0[i]-p1[i])*(p0[i]-p1[i]);
+		}
+		distance=Math.sqrt(distance);
+		return distance;
+	}
+	
+	public void getNearestPoint(KdNode chosenPoint)	
+	{
+		if (this.isLeaf())
+		{
+			double distance = this.getDistance(chosenPoint);
+			if (distance<chosenPoint.minDistance)
+			{	
+				chosenPoint.minDistance=distance;
+				chosenPoint.nearestColor=this.color;
+			}
+		}
+		else
+		{
+			int counter; // Ce compteur sera utile pour étudier le cas où l'hypersphère et l'hyperplan s'intersècent.
+			double distance = this.getDistance(chosenPoint);
+			if (distance < chosenPoint.minDistance)
+			{
+				chosenPoint.minDistance=distance;
+				chosenPoint.nearestColor=this.color;
+			}
+			if (this.color[this.vector]<chosenPoint.color[this.vector])
+			{
+				counter=1;
+				if (this.fd!=null)
+				{
+					this.fd.getNearestPoint(chosenPoint);
+				}
+			}
+			else
+			{
+				counter=0;
+				if (this.fg!=null)
+				{
+					this.fg.getNearestPoint(chosenPoint);
+				}
+			}
+			if(counter==1)
+			{
+				if(Math.abs(this.color[this.vector]-chosenPoint.color[this.vector])<chosenPoint.minDistance)
+				{
+					if (this.fg!=null)
+					{
+						this.fg.getNearestPoint(chosenPoint);
+					}
+				}
+			}
+			else
+			{
+				if(Math.abs(this.color[this.vector]-chosenPoint.color[this.vector])<chosenPoint.minDistance)
+				{
+					if (this.fd!=null)
+					{
+						this.fd.getNearestPoint(chosenPoint);
+					}
+				}				
+			}
+			
+		}
+	}
+	
 	
 }
