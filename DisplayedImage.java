@@ -2,8 +2,15 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import java.awt.Color;
+
+import kd_tree.*;
+import java.util.ArrayList;
+
  
 public class DisplayedImage extends JPanel {
 	
@@ -41,6 +48,30 @@ public class DisplayedImage extends JPanel {
     		g.drawImage(image, 0, 0, this.getWidth(), this.getHeight(), this); // draw full image
     }                   
     
-    
-    
+    public static int[][] fromImageToArray(BufferedImage img)
+    {
+    	ArrayList<int[]> pixelList= new ArrayList<int[]>();
+    	int i=0;
+		for(int x =0; x < img.getWidth();x++) 
+		{
+			for (int y =0; y < img.getHeight(); y++)
+			{
+				Color pixelcolor = new Color (img.getRGB(x,y));
+				
+				int red= pixelcolor.getRed();
+				int green = pixelcolor.getGreen();
+				int blue = pixelcolor.getBlue();
+				
+				int[] pixel= {red, green, blue};
+				pixelList.add(pixel);
+			}
+		}	
+		int a[][]=new int[273280][3];
+		for(int m=0; m<273280; m++ ) 
+		{
+			a[m]=pixelList.get(m);
+		}
+			
+		return a;
+    }
 }
