@@ -6,12 +6,13 @@ public class KdTree
 {
 	int dimension;
 	KdNode node=new KdNode();
-	int colorRange[][];
+	ColorRange range;
+	KdNode colorTree=new KdNode();
 	
 	public KdTree (int dimension) 
 	{
-		this.dimension=dimension;
-		this.colorRange=new int[0][this.dimension];
+		this.dimension=dimension;;
+		this.range=new ColorRange();
 	}
 		
 	public void initFromArray (int [][] listPoint, int vector)
@@ -26,7 +27,7 @@ public class KdTree
 	
 	public void removePoint(int[] color)
 	{
-		//TODO : Cas oÃ¹ le KdTree est vide.
+		// Cas où le KdTree est vide.
 		if (this.node.color==color)
 		{
 			this.node=null;
@@ -51,9 +52,26 @@ public class KdTree
 	}
 	
 	public void buildColorRange(int depth)
+
 	{
-		this.node.buildColorRange(this.colorRange, depth);
-		this.colorRange=Arrays.copyOfRange(this.colorRange, 1, this.colorRange.length);
+		this.node.buildColorRange(this.range, depth);
+	}
+	
+	public void colorRangeTree()
+	{
+		this.colorTree.initFromArray(this.range.getColorRange(), 0,this.dimension);
+	}
+	public int[] quantifyColor(int [] color)
+	{
+		KdNode chosenPoint=new KdNode();
+		chosenPoint.initFromPoint(color, -1, this.dimension);
+		this.colorTree.getNearestPoint(chosenPoint);
+		return chosenPoint.nearestColor; 
+	}
+	
+	public void printColorRangeTree()
+	{
+		System.out.println(colorTree.printNode());
 	}
 	
 }
@@ -62,12 +80,12 @@ class KdNode
 {
 	public int color[];
 	public int dimension;
-	public int vector; // DÃ©finit la normale Ã  l'hyperplan modulo k.
-	                   // Par exemple, dans un repÃ¨re cartÃ©sien, 0 vaut (1,0,0), 1 reprÃ©sente (0,1,0).
-                       // Dans notre exemple, k vaut 3, 0 reprÃ©sente le Rouge, 1 reprÃ©sente le vert et 2 reprÃ©sente le bleu.
+	public int vector; // Définit la normale à l'hyperplan modulo k.
+	                   // Par exemple, dans un repère cartésien, 0 vaut (1,0,0), 1 représente (0,1,0).
+                       // Dans notre exemple, k vaut 3, 0 représente le Rouge, 1 représente le vert et 2 représente le bleu.
 	public KdNode fg;
 	public KdNode fd;
-	// Les attributs suivants serviront pour la mÃ©thode getNearestPoint;
+	// Les attributs suivants serviront pour la méthode getNearestPoint;
 	int[] nearestColor;
 	double minDistance=Math.sqrt(3)*255;
 	
@@ -76,7 +94,7 @@ class KdNode
 		
 	}
 	
-	public boolean isLeaf() // VÃ©rifie si un noeud repÃ©sente une feuille.
+	public boolean isLeaf() // Vérifie si un noeud repésente une feuille.
 	{
 		if (this.fg==null && this.fd==null)
 		{
@@ -111,7 +129,7 @@ class KdNode
 		{
 			MyQuickSort sorter = new MyQuickSort(listPoint, vector);
 			listPoint=sorter.getSortedList();
-			// Nous faisons le choix de former, pour ce cas, la configuration de noeud qui possÃ©de un fils droit seulement.
+			// Nous faisons le choix de former, pour ce cas, la configuration de noeud qui posséde un fils droit seulement.
 			this.color=listPoint[0];
 			this.vector=vector;
 			this.dimension=dimension;
@@ -153,7 +171,7 @@ class KdNode
 		}
 		else
 		{
-			StringBuilder line=new StringBuilder(); // ComplÃ©ter son arbre
+			StringBuilder line=new StringBuilder(); // Compléter son arbre
 			line.append("(");
 			for (int i=0; i<this.dimension-1; i++)
 			{
@@ -222,7 +240,7 @@ class KdNode
 	
 	public void addPoint(int[] color)
 	{
-		// Ã  complÃ©ter
+		// à compléter
 	}
 	
 	public double getDistance(KdNode chosenPoint)
@@ -250,7 +268,7 @@ class KdNode
 		}
 		else
 		{
-			int counter; // Ce compteur sera utile pour Ã©tudier le cas oÃ¹ l'hypersphÃ¨re et l'hyperplan s'intersÃ¨cent.
+			int counter; // Ce compteur sera utile pour étudier le cas où l'hypersphère et l'hyperplan s'intersècent.
 			double distance = this.getDistance(chosenPoint);
 			if (distance < chosenPoint.minDistance)
 			{
@@ -293,19 +311,80 @@ class KdNode
 					}
 				}				
 			}
-			
 		}
 	}
+		public int[] meanColor()
+		{
+			if(this.isLeaf())
+			{
+				return this.color;
+			}
+			else
+			{
+				int[] a=new int[3];
+				int b[]= {0,0,0};
+				if(this.fd!=null)
+				{
+					b=this.fd.meanColor();
+				}
+				int c[]= {0,0,0};
+				if (this.fg!=null)
+				{
+					c=this.fg.meanColor();
+				}
+				for (int i=0;i<3; i++)
+				{
+					a[i]=(b[i]+c[i])/2;
+				}
+				return a;
+			}
+		}
 	
-	public void buildColorRange(int[][] colorRange, int depth)
+	
+	public void buildColorRange(ColorRange range, int depth)
 	{
-	     if (depth==1){
-		     return colorRange;
-	     }
-		
-	     else {
-		     return  concatenateArrays(buildColorRange(colorRange,depth-1),colorRange[0]);
-	     }
-			
+		if (depth==1)
+		{
+			if (this.fg!=null)
+			{
+				range.addColor(this.fg.meanColor());
+			}
+			if (this.fd!=null)
+			{
+				range.addColor(this.fd.meanColor());		
+			}	
+		}
+		else
+		{
+			if (this.fg!=null)
+			{
+				this.fg.buildColorRange(range, depth-1);
+			}
+			if (this.fd!=null)
+			{
+				this.fd.buildColorRange(range, depth-1);				
+			}	
+		}
 	}
+}
+
+class ColorRange
+{
+	private int[][] colorRange;
+	
+	public ColorRange()
+	{
+		int[][] a = {{-1,-1,-1}};
+		this.colorRange=a;
+	}
+	public void addColor(int[] color)
+	{
+		this.colorRange=Utilitary.concatenateArrays(this.colorRange, color);
+	}
+	
+	public int[][] getColorRange()
+	{
+		return Arrays.copyOfRange(this.colorRange, 1, this.colorRange.length);
+	}
+	
 }

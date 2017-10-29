@@ -20,6 +20,8 @@ import javax.imageio.ImageIO;
 import javax.print.attribute.standard.OutputDeviceAssigned;
 import javax.swing.JFileChooser;
 
+import kd_tree.*;
+
 public class ImageViewer extends JFrame /*implements ActionListener*/
 {
 
@@ -33,12 +35,14 @@ public class ImageViewer extends JFrame /*implements ActionListener*/
 	private JButton buttonAction = new JButton("Action");
 	private JButton buttonInversion = new JButton("Inversion");
 	private JButton buttonBarChart = new JButton("Bar Chart");
+	private JButton buttonQuantification= new JButton("Quantification");
 
 	//Création du header où se trouve un bouton File, et un sous-bouton Close.
 	private JMenuBar menuBar = new JMenuBar();
 	private JMenuItem loadFile = new JMenuItem("Load"); /*  On définit le bouton charger */
 	private JMenu fileMenu = new JMenu("File");
 	private JMenuItem itemClose = new JMenuItem("Close");
+	
 	
 
 	//On s'attache ici à la création du Canvas pour accueillir les images.
@@ -72,10 +76,54 @@ public class ImageViewer extends JFrame /*implements ActionListener*/
 		action.add(buttonBarChart);
 		buttonBarChart.addActionListener(new ButtonBarChartListener());
 		
+		JPanel quantification = new JPanel();
+		quantification.setLayout(new BoxLayout(quantification, BoxLayout.PAGE_AXIS));
+		quantification.add(buttonQuantification);
+		buttonQuantification.addActionListener(new ButtonListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				BufferedImage quant;
+				try {
+					quant = inputImage.getImage();
+					int[][] pixelList=DisplayedImage.fromImageToArray(quant);
+					KdTree tree=new KdTree(3);
+					tree.initFromArray(pixelList, 0);
+					tree.buildColorRange(4);
+					tree.colorRangeTree();
+					for(int x =0; x < quant.getWidth();x++) {
+						for (int y =0; y < quant.getHeight(); y++) {
+							
+							Color pixelcolor = new Color (quant.getRGB(x,y));
+							
+							int red= pixelcolor.getRed();
+							int green = pixelcolor.getGreen();
+							int blue = pixelcolor.getBlue();
+							
+							int[] tab= {red, green, blue};
+							
+							tab=tree.quantifyColor(tab);
+							int rgb = new Color(tab[0],tab[1],tab[2]).getRGB();
+							
+							quant.setRGB(x, y, rgb);
+							 
+						}
+					}					
+					ouputImage.ChangeImage(quant);
+					output.updateUI();
+					output.repaint();
+					ImageIO.write(quant, "png", new File ("quantified.png"));				
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		});		
+		
 		JPanel global = new JPanel();
 		global.setLayout(new BoxLayout(global, BoxLayout.LINE_AXIS));
 		global.add(input);
 		global.add(action);
+		global.add(quantification);
 		global.add(inversion);
 		global.add(output);
 		
@@ -173,7 +221,6 @@ public class ImageViewer extends JFrame /*implements ActionListener*/
 		this.setJMenuBar(menuBar);
 		this.setVisible(true);
 	}
-	
 	DisplayedImage getOutputImage() {
 		return ouputImage;
 		}
