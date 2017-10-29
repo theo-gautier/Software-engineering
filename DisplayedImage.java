@@ -64,10 +64,12 @@ public class DisplayedImage extends JPanel {
 				
 				int[] pixel= {red, green, blue};
 				pixelList.add(pixel);
+				i+=1;
 			}
 		}	
-		int a[][]=new int[273280][3];
-		for(int m=0; m<273280; m++ ) 
+		int a[][]=new int[i][];
+		System.out.println(a.length);
+		for(int m=0; m<a.length; m++ ) 
 		{
 			a[m]=pixelList.get(m);
 		}
