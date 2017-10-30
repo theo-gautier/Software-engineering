@@ -27,12 +27,12 @@ public class KdTree
 	
 	public void removePoint(int[] color)
 	{
-		// Cas où le KdTree est vide.
+		// Cas où le KdTree va être détruit complètement.
 		if (this.node.color==color)
 		{
 			this.node=null;
 		}
-		else
+		else //On travaille sur les feuilles de la racine (méthode récursive).
 		{
 			this.node.removePoint(color);
 		}
