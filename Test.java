@@ -9,6 +9,10 @@ public class Test {
 		a.initFromArray(list, 0);
 		System.out.print("Nous construisons un arbre :");
 		a.printTree();
+		System.out.print("Nous ajoutons le point (6,7,6) : ");
+		int[] t= {6,7,6};
+		a.addPoint(t);
+		a.printTree();
 		int[] b= {2,1,2};
 		b=a.getNearestPoint(b);
 		System.out.print("Le point le plus proche de (2, 1, 2) est :");
