@@ -61,6 +61,7 @@ public class KdTree
 	{
 		this.colorTree.initFromArray(this.range.getColorRange(), 0,this.dimension);
 	}
+	
 	public int[] quantifyColor(int [] color)
 	{
 		KdNode chosenPoint=new KdNode();
@@ -236,11 +237,52 @@ class KdNode
 				}
 			}
 		}
-	
-	
+		
 	public void addPoint(int[] color)
 	{
-		// à compléter
+		KdNode a = new KdNode();
+		int index=(this.vector+1)%this.dimension;
+		a.initFromPoint(color,index,this.dimension);
+		if (this.isLeaf())    // si c'est une feuille on ajoute directement le noeud
+		{
+			if(this.color[index]<=color[index])
+			{
+				this.fd = a;
+			}
+			else
+			{
+				this.fg=a;
+			}
+		}
+		else if (this.fd == null)  
+			if (this.color[index]<=color[index])
+			{
+				this.fd = a;
+			}
+			else
+			{
+				this.fg.addPoint(color);
+			}
+		else if (this.fg == null) 
+			if (this.color[index]>color[index])
+			{
+				this.fg = a;
+			}
+			else
+			{
+				this.fd.addPoint(color);
+			}
+		else
+		{
+			if (this.color[index]<=color[index])
+			{
+				this.fd.addPoint(color);
+			}
+			else
+			{
+				this.fg.addPoint(color);
+			}
+		}
 	}
 	
 	public double getDistance(KdNode chosenPoint)
