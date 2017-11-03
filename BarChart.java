@@ -36,8 +36,6 @@ public class BarChart extends ApplicationFrame {
     	int tab[] = new int[3]; //Tableau contenant les compteurs de rouge vert et bleu dans l'image.
 
     	for (y = 0; y < image.getHeight(); y ++) {
-    		System.out.println("lol");
-
     		for (x = 0; x < image.getWidth(); x++) {
     			color = image.getRGB(x,y);
     			int r = (color>>16)&0xFF; //red
