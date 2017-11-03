@@ -75,6 +75,16 @@ public class KdTree
 		System.out.println(colorTree.printNode());
 	}
 	
+	public int fromColorToIndex(int red, int green, int blue)
+	{
+		return range.fromColorToIndex(red, green, blue);
+	}
+	
+	public int[] fromIndexToColor(int index)
+	{
+		return range.fromIndexToColor(index);
+	}
+	
 }
 
 class KdNode
@@ -428,5 +438,20 @@ class ColorRange
 	{
 		return Arrays.copyOfRange(this.colorRange, 1, this.colorRange.length);
 	}
-	
+	public int fromColorToIndex(int red, int green, int blue)
+	{
+		int[] color= {red, green, blue};
+		for (int i=0; i<this.colorRange.length; i++)
+		{
+			if(color==this.colorRange[i])
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	public int[] fromIndexToColor(int index)
+	{
+		return this.colorRange[index];
+	}
 }
