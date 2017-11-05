@@ -68,7 +68,6 @@ public class DisplayedImage extends JPanel {
 			}
 		}	
 		int a[][]=new int[i][];
-		System.out.println(a.length);
 		for(int m=0; m<a.length; m++ ) 
 		{
 			a[m]=pixelList.get(m);
