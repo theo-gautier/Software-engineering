@@ -123,15 +123,17 @@ public class ImageViewer extends JFrame /*implements ActionListener*/
 							tab=tree.quantifyColor(tab);
 							int rgb = new Color(tab[0],tab[1],tab[2]).getRGB();
 							
-							/* Ici on écrit l'entier dans le buffer
-							String rgb_str = "" + rgb;
-							byte[] rgb_bytes = (rgb_str).getBytes(); 
-							buff.put(rgb_bytes); //TODO : Ecrire l'indice.
-							buff.put(" ".getBytes()); */
+							int index = tree.fromColorToIndex(tab[0],tab[1],tab[2]);
+							//Ici on écrit l'entier dans le buffer
+							String index_str = "" + index;
+							byte[] index_bytes = (index_str).getBytes(); 
+							buff.put(index_bytes); //TODO : Ecrire l'indice.
+							buff.put(" ".getBytes()); 
 							
 							quant.setRGB(x, y, rgb);
 							 
 						}
+						buff.put("\n".getBytes()); //Espacement pour lisibité du code dans le ppm 
 					}					
 					ouputImage.ChangeImage(quant);
 					output.updateUI();

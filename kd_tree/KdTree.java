@@ -440,10 +440,19 @@ class ColorRange
 	}
 	public int fromColorToIndex(int red, int green, int blue)
 	{
+		int c;
 		int[] color= {red, green, blue};
+		//Pour tester l'égalité des tableaux, on fait une égalité terme à terme.
 		for (int i=0; i<this.colorRange.length; i++)
 		{
-			if(color==this.colorRange[i])
+			c = 0;
+			for(int j = 0; j < 3; j++) {
+				if(color[j] == colorRange[i][j]) {
+					c++;
+				}
+			}
+			
+			if(c == 3)
 			{
 				return i;
 			}
