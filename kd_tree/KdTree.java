@@ -8,7 +8,6 @@ public class KdTree
 	KdNode node=new KdNode();
 	ColorRange range;
 	KdNode colorTree=new KdNode();
-	
 	public KdTree (int dimension) 
 	{
 		this.dimension=dimension;;
